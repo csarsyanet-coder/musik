@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Arsya Musik</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at top, #5b21ff 0%, #111827 40%, #020617 100%);
+      background-size: 200% 200%;
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: bgShift 24s ease-in-out infinite;
+    }
+    @keyframes bgShift {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.95), rgba(124, 58, 237, 0.98));
+      border-radius: 20px;
+      padding: 22px 22px 18px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.65), 0 0 0 1px rgba(191,219,254,.05);
+      position: relative;
+      overflow: hidden;
+    }
+    .container::before {
+      content: "";
+      position: absolute;
+      width: 220px; height: 220px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(251,113,133,.35), transparent 70%);
+      top: -80px; right: -40px;
+      filter: blur(4px);
+      pointer-events: none;
+    }
+    .glass-header {
+      position: relative;
+      background: linear-gradient(135deg, rgba(15,23,42,.75), rgba(15,23,42,.45));
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 12px 30px rgba(15,23,42,.75);
+    }
+    .logo-circle {
+      width: 38px; height: 38px;
+      border-radius: 999px;
+      background: conic-gradient(from 180deg, #a855f7, #38bdf8, #6366f1, #a855f7);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 20px rgba(129,140,248,.8);
+      flex-shrink: 0; position: relative; overflow: hidden;
+    }
+    .logo-circle::after {
+      content: "";
+      position: absolute; inset: 4px;
+      border-radius: inherit;
+      background: radial-gradient(circle at top, rgba(15,23,42,.9), rgba(15,23,42,.7));
+    }
+    .logo-circle span {
+      position: relative;
+      font-size: 18px; font-weight: 800;
+      color: #e0f2fe;
+      text-shadow: 0 0 10px rgba(129,140,248,.9);
+    }
+    .title-block { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    h1 {
+      font-size: 20px; margin: 0;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #e0f2fe;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .subtitle {
+      font-size: 11px; text-transform: uppercase;
+      letter-spacing: .16em; color: #bfdbfe; opacity: .85;
+    }
+    .tag-badge {
+      margin-left: auto; font-size: 11px;
+      padding: 4px 8px; border-radius: 999px;
+      background: radial-gradient(circle at top left, #22c55e, #15803d);
+      color: #ecfdf5; text-transform: uppercase;
+      letter-spacing: .12em;
+      border: 1px solid rgba(187,247,208,.5);
+    }
+    .playlist-selector {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      align-items: center;
+      font-size: 11px;
+    }
+    .playlist-selector label {
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      opacity: .85;
+    }
+    .playlist-selector select {
+      border-radius: 999px;
+      border: 1px solid rgba(191,219,254,.7);
+      background: rgba(15,23,42,.85);
+      color: #e5e7eb;
+      font-size: 11px;
+      padding: 4px 10px;
+      outline: none;
+    }
+
+    .now-playing-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .disc {
+      width: 32px; height: 32px;
+      border-radius: 999px;
+      border: 3px solid rgba(191,219,254,.85);
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 40%, #1e40af 80%);
+      position: relative;
+      box-shadow: 0 0 12px rgba(129,140,248,.8);
+      animation: spinDisc 5s linear infinite;
+      animation-play-state: paused;
+      flex-shrink: 0;
+    }
+    .disc::before {
+      content: ""; position: absolute; inset: 8px;
+      border-radius: inherit;
+      background: radial-gradient(circle, #1f2937 0%, #020617 80%);
+    }
+    .disc::after {
+      content: ""; position: absolute; inset: 13px;
+      border-radius: inherit; background: #e5e7eb;
+    }
+    .disc.playing { animation-play-state: running; }
+    @keyframes spinDisc {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    #current-title {
+      position: relative;
+      font-weight: 600; text-align: left;
+      font-size: 14px; color: #e5e7eb;
+      padding: 8px 10px 6px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(15,23,42,.9), rgba(15,23,42,.7));
+      border: 1px solid rgba(148,163,184,.4);
+      display: flex; align-items: center; gap: 8px;
+      flex: 1; min-width: 0;
+    }
+    #current-title::before {
+      content: "▶";
+      font-size: 11px; color: #22c55e; opacity: .9;
+    }
+
+    audio {
+      margin-top: 8px;
+      width: 100%;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(15,23,42,.7);
+    }
+
+    .controls {
+      margin-top: 8px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: none;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+      white-space: nowrap;
+    }
+    button:hover {
+      opacity: .95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 15px rgba(15,23,42,.4);
+    }
+    button:active {
+      transform: translateY(0) scale(.97);
+      box-shadow: none;
+    }
+    .prev, .next {
+      background: radial-gradient(circle at top left, #1d4ed8, #0f172a);
+      color: #e5e7eb;
+      border: 1px solid rgba(191,219,254,.4);
+    }
+    .play-pause {
+      background: radial-gradient(circle at top, #f97316, #ea580c);
+      color: #0b1120;
+      border: 1px solid rgba(254,215,170,.7);
+    }
+    .shuffle {
+      background: radial-gradient(circle at top, #22c55e, #15803d);
+      color: #ecfdf5;
+      border: 1px solid rgba(187,247,208,.7);
+    }
+    .shuffle.on { box-shadow: 0 0 0 2px rgba(22,163,74,.9); }
+    .repeat {
+      background: radial-gradient(circle at top, #a855f7, #7c3aed);
+      color: #fdf2ff;
+      border: 1px solid rgba(233,213,255,.7);
+    }
+    .repeat.on { box-shadow: 0 0 0 2px rgba(192,132,252,.9); }
+
+    .playlist {
+      margin-top: 12px;
+      max-height: 230px;
+      overflow-y: auto;
+      background: radial-gradient(circle at top left, rgba(15,23,42,.95), rgba(15,23,42,.9));
+      border-radius: 14px;
+      padding: 8px;
+      font-size: 13px;
+      border: 1px solid rgba(148,163,184,.5);
+    }
+    .playlist-item {
+      padding: 6px 8px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background .1s ease, transform .1s ease;
+    }
+    .playlist-item + .playlist-item { margin-top: 2px; }
+    .playlist-item span.title {
+      flex: 1; min-width: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .playlist-item:hover {
+      background: linear-gradient(90deg, rgba(37,99,235,.4), rgba(129,140,248,.35));
+      transform: translateY(-1px);
+    }
+    .playlist-item.active {
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      color: #e5e7eb;
+      box-shadow: 0 0 0 1px rgba(191,219,254,.65);
+    }
+    .index-number {
+      opacity: .75; margin-right: 8px;
+      width: 18px; text-align: right; font-size: 11px;
+    }
+    .duration-chip {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.75);
+      border: 1px solid rgba(148,163,184,.6);
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    .footer {
+      margin-top: 6px;
+      font-size: 10px;
+      text-align: right;
+      opacity: .7;
+    }
+    .footer span {
+      opacity: .9;
+      font-weight: 500;
+      color: #bfdbfe;
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 18px 16px 14px; }
+      h1 { font-size: 18px; }
+      .subtitle { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="glass-header">
+      <div class="logo-circle"><span>A</span></div>
+      <div class="title-block">
+        <h1>Arsya Musik</h1>
+        <div class="subtitle">Multi Playlist · Chill Vibes</div>
+      </div>
+      <div class="tag-badge">LIVE</div>
+    </div>
+
+    <div class="playlist-selector">
+      <label for="playlistSelect">PLAYLIST</label>
+      <select id="playlistSelect">
+        <option value="arsya">Arsya Default</option>
+        <option value="chill">Chill</option>
+        <option value="game">Game</option>
+      </select>
+    </div>
+
+    <div class="now-playing-row">
+      <div class="disc" id="disc"></div>
+      <div id="current-title">Memuat...</div>
+    </div>
+
+    <audio id="audio" controls>
+      Browser kamu tidak mendukung audio.
+    </audio>
+
+    <div class="controls">
+      <button class="prev">⏮ <span>Sebelumnya</span></button>
+      <button class="play-pause">⏯ <span>Play/Pause</span></button>
+      <button class="next">⏭ <span>Selanjutnya</span></button>
+      <button class="shuffle">🔀 <span>Shuffle OFF</span></button>
+      <button class="repeat">🔁 <span>Repeat OFF</span></button>
+    </div>
+
+    <div class="playlist" id="playlist"></div>
+
+    <div class="footer">
+      Arsya Musik · <span>Made for you</span>
+    </div>
+  </div>
+
+  <script>
+    // ========== ATUR PLAYLIST & FOLDER DI SINI ==========
+    // Struktur folder contoh:
+    // musik/arsya/..., musik/chill/..., musik/game/...
+
+    const playlists = {
+      arsya: {
+        label: "Arsya Default",
+        basePath: "musik/arsya/",
+        songs: [
+          { title: "Yang Terbaik Bagimu", file: "lagu1.mp3" },
+          { title: "Raiso Ngapusi", file: "lagu2.mp3" },
+          { title: "Aku Cah Kerjo", file: "lagu3.mp3" },
+          { title: "Samudrane Janji", file: "lagu4.mp3" },
+          { title: "Ego Wong Tuo", file: "lagu5.mp3" },
+          { title: "Kangen", file: "lagu6.mp3" },
+          { title: "Macak Kelaran", file: "lagu7.mp3" },
+          { title: "Kalah", file: "lagu8.mp3" },
+          { title: "Nresnani", file: "lagu9.mp3" },
+          { title: "Sewates Konco", file: "lagu10.mp3" },
+          { title: "Ora Ngemis Bali", file: "lagu11.mp3" },
+          { title: "Saktenane 2", file: "lagu12.mp3" },
+          { title: "Demi Koe", file: "lagu12.mp3" },
+        ]
+      },
+      chill: {
+        label: "Chill",
+        basePath: "musik/chill/",
+        songs: [
+          { title: "Chill 1", file: "chill1.mp3" },
+          { title: "Chill 2", file: "chill2.mp3" }
+        ]
+      },
+      game: {
+        label: "Game",
+        basePath: "musik/game/",
+        songs: [
+          { title: "Game 1", file: "game1.mp3" },
+          { title: "Game 2", file: "game2.mp3" }
+        ]
+      }
+    };
+    // =====================================================
+
+    const audio = document.getElementById("audio");
+    const titleEl = document.getElementById("current-title");
+    const playlistEl = document.getElementById("playlist");
+    const btnPrev = document.querySelector(".prev");
+    const btnNext = document.querySelector(".next");
+    const btnPlayPause = document.querySelector(".play-pause");
+    const btnShuffle = document.querySelector(".shuffle");
+    const btnRepeat = document.querySelector(".repeat");
+    const discEl = document.getElementById("disc");
+    const playlistSelect = document.getElementById("playlistSelect");
+
+    let currentPlaylistKey = "arsya";
+    let currentIndex = 0;
+    let shuffleOn = false;
+    let repeatOne = false;
+
+    function getCurrentPlaylist() {
+      return playlists[currentPlaylistKey];
+    }
+    function getSongs() {
+      return getCurrentPlaylist().songs;
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "";
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return m + ":" + (s < 10 ? "0" + s : s);
+    }
+
+    function renderPlaylist() {
+      playlistEl.innerHTML = "";
+      const songs = getSongs();
+      songs.forEach((song, index) => {
+        const item = document.createElement("div");
+        item.className = "playlist-item";
+        item.dataset.index = index;
+
+        const idxSpan = document.createElement("span");
+        idxSpan.className = "index-number";
+        idxSpan.textContent = (index + 1) + ".";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "title";
+        titleSpan.textContent = song.title;
+
+        const durationSpan = document.createElement("span");
+        durationSpan.className = "duration-chip";
+        durationSpan.textContent = song.duration || "";
+
+        item.appendChild(idxSpan);
+        item.appendChild(titleSpan);
+        item.appendChild(durationSpan);
+
+        item.addEventListener("click", () => {
+          currentIndex = index;
+          loadSong(currentIndex);
+          playSong();
+        });
+
+        playlistEl.appendChild(item);
+      });
+      highlightActive();
+      // isi durasi otomatis
+      loadDurations();
+    }
+
+    function highlightActive() {
+      const items = playlistEl.querySelectorAll(".playlist-item");
+      items.forEach((el, i) => {
+        el.classList.toggle("active", i === currentIndex);
+      });
+    }
+
+    function loadSong(index) {
+      const pl = getCurrentPlaylist();
+      const songs = pl.songs;
+      const song = songs[index];
+      if (!song) return;
+      const src = pl.basePath + song.file;
+      audio.src = src;
+      titleEl.textContent = song.title;
+      highlightActive();
+    }
+
+    function playSong() {
+      audio.play();
+      btnPlayPause.innerHTML = "⏸ <span>Pause</span>";
+      discEl.classList.add("playing");
+    }
+    function pauseSong() {
+      audio.pause();
+      btnPlayPause.innerHTML = "⏯ <span>Play/Pause</span>";
+      discEl.classList.remove("playing");
+    }
+
+    function nextIndexSequential() {
+      const songs = getSongs();
+      return (currentIndex + 1) % songs.length;
+    }
+    function nextIndexShuffle() {
+      const songs = getSongs();
+      if (songs.length <= 1) return currentIndex;
+      let next;
+      do {
+        next = Math.floor(Math.random() * songs.length);
+      } while (next === currentIndex);
+      return next;
+    }
+
+    function playNext() {
+      currentIndex = shuffleOn ? nextIndexShuffle() : nextIndexSequential();
+      loadSong(currentIndex);
+      playSong();
+    }
+    function playPrev() {
+      const songs = getSongs();
+      if (shuffleOn) {
+        currentIndex = nextIndexShuffle();
+      } else {
+        currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+      }
+      loadSong(currentIndex);
+      playSong();
+    }
+
+    btnPrev.addEventListener("click", playPrev);
+    btnNext.addEventListener("click", playNext);
+
+    btnPlayPause.addEventListener("click", () => {
+      if (audio.paused) playSong();
+      else pauseSong();
+    });
+
+    btnShuffle.addEventListener("click", () => {
+      shuffleOn = !shuffleOn;
+      if (shuffleOn) {
+        btnShuffle.innerHTML = "🔀 <span>Shuffle ON</span>";
+        btnShuffle.classList.add("on");
+      } else {
+        btnShuffle.innerHTML = "🔀 <span>Shuffle OFF</span>";
+        btnShuffle.classList.remove("on");
+      }
+    });
+
+    btnRepeat.addEventListener("click", () => {
+      repeatOne = !repeatOne;
+      if (repeatOne) {
+        btnRepeat.innerHTML = "🔂 <span>Repeat ONE</span>";
+        btnRepeat.classList.add("on");
+      } else {
+        btnRepeat.innerHTML = "🔁 <span>Repeat OFF</span>";
+        btnRepeat.classList.remove("on");
+      }
+    });
+
+    audio.addEventListener("ended", () => {
+      if (repeatOne) {
+        audio.currentTime = 0;
+        playSong();
+      } else {
+        playNext();
+      }
+    });
+
+    audio.addEventListener("play", () => discEl.classList.add("playing"));
+    audio.addEventListener("pause", () => discEl.classList.remove("playing"));
+
+    // hitung durasi tiap lagu di playlist aktif
+    function loadDurations() {
+      const pl = getCurrentPlaylist();
+      const songs = pl.songs;
+
+      songs.forEach((song, index) => {
+        if (song.duration) return; // sudah ada
+        const tempAudio = new Audio();
+        tempAudio.src = pl.basePath + song.file;
+        tempAudio.addEventListener("loadedmetadata", () => {
+          song.duration = formatTime(tempAudio.duration);
+          const item = playlistEl.querySelectorAll(".playlist-item")[index];
+          if (item) {
+            const chip = item.querySelector(".duration-chip");
+            if (chip) chip.textContent = song.duration;
+          }
+        });
+      });
+    }
+
+    // ganti playlist
+    playlistSelect.addEventListener("change", () => {
+      currentPlaylistKey = playlistSelect.value;
+      currentIndex = 0;
+      pauseSong();
+      renderPlaylist();
+      loadSong(currentIndex);
+    });
+
+    // pertama kali jalan
+    renderPlaylist();
+    loadSong(currentIndex);
+  </script>
+</body>
+</html>
