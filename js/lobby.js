@@ -12,7 +12,7 @@ const GAMES = [
 
   {
   id: "snake",
-  name: "Math Sprint",
+  name: "Ular Nokia",
   desc: "Game Nokia Zaman Dulu.",
   emoji: "🐍",
   tags: ["fun","animal","brain"],
@@ -137,3 +137,4 @@ $("infoBtn").addEventListener("click", () => {
 
 
 render();
+
