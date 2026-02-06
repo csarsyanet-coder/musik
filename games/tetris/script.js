@@ -518,14 +518,111 @@
     btn.addEventListener("touchstart", (e) => { e.preventDefault(); act(a); }, { passive: false });
   });
 
+
   // Buttons
   btnStart.addEventListener("click", start);
   btnPause.addEventListener("click", togglePause);
   btnRestart.addEventListener("click", () => { reset(); running = true; paused = false; gameOver = false; hideOverlay(); syncUI(); });
   btnExit.addEventListener("click", () => {
     // sesuaikan kalau lobby kamu beda
-    window.location.href = "../../";
+    window.location.href = "../../index.html";
   });
+  // ===== Touch Drag: piece mengikuti jari di canvas =====
+let dragActive = false;
+let dragStartX = 0;
+let dragLastCol = null;
+
+function pieceWidthCells(p){
+  // hitung lebar efektif piece (kolom paling kiri/kanan yang ada blok)
+  let minX = 999, maxX = -999;
+  for (let y=0; y<p.m.length; y++){
+    for (let x=0; x<p.m[y].length; x++){
+      if (!p.m[y][x]) continue;
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+    }
+  }
+  if (maxX < 0) return 0;
+  return (maxX - minX + 1);
+}
+
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+function movePieceToColumn(targetX){
+  if (!running || paused || isGameOver) return;
+  if (!piece) return;
+
+  // geser step-by-step supaya tetap respect collision
+  while (piece.x < targetX && !collides(piece, piece.m, piece.x + 1, piece.y)) {
+    piece.x += 1;
+  }
+  while (piece.x > targetX && !collides(piece, piece.m, piece.x - 1, piece.y)) {
+    piece.x -= 1;
+  }
+}
+
+function getTouchX(e){
+  const t = e.touches && e.touches[0] ? e.touches[0] : (e.changedTouches ? e.changedTouches[0] : null);
+  return t ? t.clientX : null;
+}
+
+function xToColumn(clientX){
+  const rect = board.getBoundingClientRect();
+  const x = clientX - rect.left;
+
+  // map posisi jari -> kolom, lalu clamp biar mentok arena
+  const rawCol = Math.floor((x / rect.width) * COLS);
+
+  // biar tidak bisa “keluar” walau piece lebar (O/I)
+  const w = pieceWidthCells(piece);
+  const maxCol = COLS - w;   // mentok kanan
+  const col = clamp(rawCol, 0, maxCol);
+  return col;
+}
+
+// Jangan biarkan browser scroll saat geser di canvas
+board.style.touchAction = "none";
+
+board.addEventListener("touchstart", (e) => {
+  if (!running || paused || isGameOver) return;
+  e.preventDefault();
+
+  dragActive = true;
+  const x = getTouchX(e);
+  if (x == null) return;
+
+  dragStartX = x;
+  dragLastCol = xToColumn(x);
+
+  movePieceToColumn(dragLastCol);
+}, { passive:false });
+
+board.addEventListener("touchmove", (e) => {
+  if (!dragActive) return;
+  if (!running || paused || isGameOver) return;
+  e.preventDefault();
+
+  const x = getTouchX(e);
+  if (x == null) return;
+
+  const col = xToColumn(x);
+
+  // biar nggak spam move tiap pixel, cuma kalau kolom berubah
+  if (col !== dragLastCol) {
+    dragLastCol = col;
+    movePieceToColumn(col);
+  }
+}, { passive:false });
+
+board.addEventListener("touchend", (e) => {
+  dragActive = false;
+  dragLastCol = null;
+}, { passive:false });
+
+board.addEventListener("touchcancel", (e) => {
+  dragActive = false;
+  dragLastCol = null;
+}, { passive:false });
 
   // Init
   reset();
@@ -533,4 +630,3 @@
   syncUI();
   requestAnimationFrame(frame);
 })();
-
