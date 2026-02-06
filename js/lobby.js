@@ -21,6 +21,16 @@ const GAMES = [
   },
   
   {
+  id: "tetris",
+  name: "Tetris",
+  desc: "Tetris",
+  emoji: "🪨",
+  tags: ["fun","speed","brain"],
+  status: "Play",
+  href: "games/tetris/"
+  },
+  
+  {
     id: "coming-soon",
     name: "Coming Soon",
     desc: "Game berikutnya akan ditambahkan. Lobby ini siap di-scale.",
@@ -137,4 +147,5 @@ $("infoBtn").addEventListener("click", () => {
 
 
 render();
+
 
