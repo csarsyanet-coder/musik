@@ -524,7 +524,7 @@
   btnRestart.addEventListener("click", () => { reset(); running = true; paused = false; gameOver = false; hideOverlay(); syncUI(); });
   btnExit.addEventListener("click", () => {
     // sesuaikan kalau lobby kamu beda
-    window.location.href = "../../index.html";
+    window.location.href = "../../";
   });
 
   // Init
@@ -533,3 +533,4 @@
   syncUI();
   requestAnimationFrame(frame);
 })();
+
