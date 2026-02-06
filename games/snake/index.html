@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Snake Nokia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="phone">
+  <div class="screen">
+    <canvas id="game" width="520" height="300"></canvas>
+
+    <!-- MENU -->
+    <div class="menu" id="menu">
+      <h2>SNAKE</h2>
+
+      <div class="select">
+        <span>Mode</span>
+        <select id="mode">
+          <option value="classic" selected>Mode Biasa</option>
+          <option value="adventure">Adventure (Ada Tembok)</option>
+        </select>
+      </div>
+
+      <div class="select">
+        <span>Kesulitan</span>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="normal" selected>Normal</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="select">
+        <span>Warna ular</span>
+        <input id="snakeColor" type="color" value="#000000" />
+      </div>
+
+      <div class="select">
+        <span>Warna mata</span>
+        <input id="eyeColor" type="color" value="#ffffff" />
+      </div>
+
+      <div class="menu-actions">
+        <button id="btnStart">▶ Mulai</button>
+        <button id="btnRestart">⟳ Ulangi</button>
+        <button id="btnExit">⬅ Keluar</button>
+      </div>
+
+      <div class="lb">
+        <div class="lb-head">
+          <div><b>Leaderboard</b> <span class="muted">(Top 10 per mode)</span></div>
+          <button id="btnLbReset" class="mini" type="button">Reset</button>
+        </div>
+        <ol id="lbList" class="lb-list"></ol>
+      </div>
+
+      <p class="tip">
+        Kontrol: WASD / Arrow • P = Pause
+      </p>
+    </div>
+  </div>
+
+  <div class="info">
+    <span>Score: <b id="score">0</b></span>
+    <span>Best: <b id="best">0</b></span>
+    <span>Lv: <b id="lvl">1</b></span>
+    <span>Status: <b id="status">READY</b></span>
+  </div>
+
+  <!-- TOUCH CONTROLS (Android) -->
+  <div class="touch" aria-label="Kontrol sentuh">
+    <button class="tbtn up" data-dir="up" aria-label="Atas">▲</button>
+    <button class="tbtn left" data-dir="left" aria-label="Kiri">◀</button>
+    <button class="tbtn mid" data-dir="pause" aria-label="Pause">⏸</button>
+    <button class="tbtn right" data-dir="right" aria-label="Kanan">▶</button>
+    <button class="tbtn down" data-dir="down" aria-label="Bawah">▼</button>
+  </div>
+
+  <div class="touch2">
+    <button class="tbtn2" data-dir="restart">⟳ Restart</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

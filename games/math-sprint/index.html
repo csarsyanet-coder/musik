@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Math Sprint</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="back" href="../../">← Lobby</a>
+      <div class="title">
+        <h1>Math Sprint</h1>
+        <div class="muted">Jawab cepat • skor naik • difficulty adaptif</div>
+      </div>
+      <div class="topRight">
+        <div class="pill">Best: <span id="best">0</span></div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- left -->
+      <section class="panel">
+        <div class="row">
+          <div class="stat">
+            <div class="k">Time</div>
+            <div class="v"><span id="time">60</span>s</div>
+          </div>
+          <div class="stat">
+            <div class="k">Score</div>
+            <div class="v" id="score">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Streak</div>
+            <div class="v" id="streak">0</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="small">Soal</div>
+          <div class="question" id="question">—</div>
+
+          <div class="answerRow">
+            <input id="answer" inputmode="numeric" autocomplete="off" placeholder="Jawaban..." />
+            <button id="submit" class="btn primary">Enter</button>
+          </div>
+
+          <div class="feedback" id="feedback"></div>
+        </div>
+
+        <div class="row2">
+          <button id="start" class="btn primary">Start</button>
+          <button id="pause" class="btn">Pause</button>
+          <button id="reset" class="btn">Reset</button>
+        </div>
+
+        <div class="hint">
+          Tips: fokus streak. Streak tinggi → level naik → skor makin besar.
+        </div>
+      </section>
+
+      <!-- right -->
+      <section class="panel">
+        <div class="panelTitle">Pengaturan</div>
+
+        <div class="form">
+          <label class="lab">Durasi</label>
+          <div class="chips" id="durationChips">
+            <button class="chip active" data-sec="60">60s</button>
+            <button class="chip" data-sec="90">90s</button>
+            <button class="chip" data-sec="120">120s</button>
+          </div>
+
+          <label class="lab">Operasi</label>
+          <div class="checks">
+            <label><input type="checkbox" id="opAdd" checked> +</label>
+            <label><input type="checkbox" id="opSub" checked> −</label>
+            <label><input type="checkbox" id="opMul" checked> ×</label>
+            <label><input type="checkbox" id="opDiv" checked> ÷</label>
+          </div>
+
+          <label class="lab">Kesulitan</label>
+          <select id="difficulty">
+            <option value="auto" selected>Auto (Adaptif)</option>
+            <option value="easy">Easy</option>
+            <option value="normal">Normal</option>
+            <option value="hard">Hard</option>
+          </select>
+
+          <div class="note">
+            Pembagian selalu dibuat supaya hasilnya bulat (tanpa desimal).
+          </div>
+        </div>
+
+        <div class="panelTitle" style="margin-top:14px;">Riwayat (session)</div>
+        <div class="history" id="history"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
