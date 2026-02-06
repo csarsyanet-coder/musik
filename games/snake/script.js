@@ -46,6 +46,7 @@ let snake, dir, food, score;
 let running=false, paused=false;
 
 let tick=0, tickDiv=8;
+let baseTickDiv = 8; // speed tetap sesuai difficulty
 let level=1;
 
 // mode
@@ -216,7 +217,9 @@ function initState(){
   mode = modeSelect.value || "classic";
 
   const diff = diffSelect.value || "normal";
-  tickDiv = DIFF_BASE[diff] ?? 8;
+  baseTickDiv = DIFF_BASE[diff] ?? 8;
+  tickDiv = baseTickDiv;
+
 
   normalEaten=0;
   superFood=null;
@@ -256,10 +259,10 @@ function increaseDifficultyIfNeeded(){
     level = newLevel;
     lvlEl.textContent = String(level);
 
-    // makin susah
-    tickDiv = Math.max(2, tickDiv - 1);
+    // speed TETAP (sesuai difficulty)
+    tickDiv = baseTickDiv;
 
-    // adventure: tambah tembok acak
+    // adventure: tambah tembok acak makin lama makin banyak
     if (mode === "adventure"){
       const add = clamp(3 + Math.floor(level/2), 3, 10);
       addRandomWalls(add);
