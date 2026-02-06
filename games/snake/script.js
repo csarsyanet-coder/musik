@@ -243,7 +243,7 @@ function startGame(){
   statusEl.textContent="PLAY";
 }
 function restartGame(){ startGame(); }
-function exitGame(){ window.location.href = "../../index.html"; }
+function exitGame(){ window.location.href = "../../"; }
 
 btnStart.addEventListener("click", startGame);
 btnRestart.addEventListener("click", restartGame);
@@ -480,3 +480,4 @@ function loop(ts){
 initState();
 menu.style.display="grid";
 requestAnimationFrame(loop);
+
