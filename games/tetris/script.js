@@ -497,7 +497,7 @@
     if (k === "c") return doHold();
   }, { passive: false });
 
-  // Touch buttons
+ 
   function act(a){
     if (a === "pause") return togglePause();
     if (a === "hold") return doHold();
@@ -519,15 +519,14 @@
   });
 
 
-  // Buttons
+ 
   btnStart.addEventListener("click", start);
   btnPause.addEventListener("click", togglePause);
   btnRestart.addEventListener("click", () => { reset(); running = true; paused = false; gameOver = false; hideOverlay(); syncUI(); });
   btnExit.addEventListener("click", () => {
-    // sesuaikan kalau lobby kamu beda
-    window.location.href = "../../index.html";
+  window.location.href = "../../";
   });
-  // ===== Touch Drag: piece mengikuti jari di canvas =====
+  
 let dragActive = false;
 let dragStartX = 0;
 let dragLastCol = null;
@@ -630,3 +629,4 @@ board.addEventListener("touchcancel", (e) => {
   syncUI();
   requestAnimationFrame(frame);
 })();
+
